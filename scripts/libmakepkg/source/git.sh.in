@@ -52,6 +52,10 @@ download_git() {
 			error "$(gettext "Failure while downloading %s %s repo")" "${repo}" "git"
 			plainerr "$(gettext "Aborting...")"
 			exit 1
+		elif grep -q "filter=lfs" <(git -C "$dir" show HEAD:.gitattributes) && ! git -C "$dir" lfs fetch; then
+			error "$(gettext "Failure while downloading LFS objects of %s %s repo")" "${repo}" "git"
+			plainerr "$(gettext "Aborting...")"
+			exit 1
 		fi
 	elif (( ! HOLDVER )); then
 		cd_safe "$dir"
